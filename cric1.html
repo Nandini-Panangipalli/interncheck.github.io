@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cricket Game</title>
+  <style>
+#game-container {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <h1>Game of Cricket</h1>
+    <div id="instructions">
+      <!-- Game instructions here -->
+      <p>-------- Game of Cricket --------
+ 
+Instructions to follow:
+ 
+1. Any random number between 1 and 6 should be chosen by you.
+2. Then the hacker also chooses a number. 
+3.If you and the hacker chose different numbers when you hit, your number will be added to the run. 
+  You lose the wicket if you and the hacker choose the same number.
+4. In bowling, if you and the hacker chose different numbers, the computer's number will be added to the run. 
+  If you and the hacker pick the same number, the hacker loses the wicket, similar to the previous rule.
+5. You and Hacker will get 2 wickets and 2 overs with bat and bowling.
+6. Here each over consists of  6 balls. This means that a player can throw a total of 12 balls in 2 overs.
+7. The inning ends after the wickets have fallen or the over has ended.
+8. The player with the most runs wins.
+</p>
+ 
+<p>---------- Start Game ----------</p>
+    </div>
+    <button id="start-btn">Start Game</button>
+    <div id="toss-container" class="hidden">
+      <h2>Toss Time</h2>
+      <label for="toss-input">Choose heads or tails:</label>
+      <select id="toss-input">
+        <option value="heads">Heads</option>
+        <option value="tails">Tails</option>
+      </select>
+      <button id="toss-btn">Toss</button>
+    </div>
+    <div id="gameplay-container" class="hidden">
+      <!-- Game play elements here -->
+    </div>
+    <div id="result-container" class="hidden">
+      <!-- Result of the match here -->
+    </div>
+  </div>
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Game elements
+  const instructions = document.getElementById("instructions");
+  const startBtn = document.getElementById("start-btn");
+  const tossContainer = document.getElementById("toss-container");
+  const tossInput = document.getElementById("toss-input");
+  const tossBtn = document.getElementById("toss-btn");
+  const gameplayContainer = document.getElementById("gameplay-container");
+  const resultContainer = document.getElementById("result-container");
+
+  // Game logic variables
+  let tossResult = "";
+  let yourOpt = "";
+  let compOpt = "";
+  let runsP1 = 0;
+  let wicketsP1 = 0;
+  let ballsP1 = 0;
+
+  // Show instructions and start the game
+  startBtn.addEventListener("click", function() {
+    instructions.classList.add("hidden");
+    tossContainer.classList.remove("hidden");
+  });
+
+  // Handle toss button click
+  tossBtn.addEventListener("click", function() {
+    const selectedOption = tossInput.value;
+    tossResult = selectedOption;
+    // Perform toss logic and decide batting or bowling
+    if (Math.random() < 0.5) {
+      yourOpt = selectedOption === "heads" ? "bat" : "ball";
+      compOpt = yourOpt === "bat" ? "ball" : "bat";
+    } else {
+      compOpt = selectedOption === "heads" ? "bat" : "ball";
+      yourOpt = compOpt === "bat" ? "ball" : "bat";
+    }
+    tossContainer.classList.add("hidden");
+    gameplayContainer.classList.remove("hidden");
+    // Call a function to display gameplay elements and handle game logic
+    playGame();
+  });
+
+  // Function to display gameplay elements and handle game logic
+  function playGame() {
+    // Display batting or bowling information
+    const battingInfo = document.createElement("p");
+    battingInfo.textContent = `You chose ${yourOpt}, Hacker chose ${compOpt}`;
+    gameplayContainer.appendChild(battingInfo);
+
+    // Handle user input for each ball
+    const ballInput = document.createElement("input");
+    ballInput.type = "number";
+    ballInput.min = 1;
+    ballInput.max = 6;
+    gameplayContainer.appendChild(ballInput);
+
+    const ballBtn = document.createElement("button");
+    ballBtn.textContent = "Hit/Bowl";
+    gameplayContainer.appendChild(ballBtn);
+
+    ballBtn.addEventListener("click", function() {
+      const userChoice = parseInt(ballInput.value);
+      const compChoice = Math.floor(Math.random() * 6) + 1;
+      let resultText = "";
+      
+      if (yourOpt === "bat" && compOpt === "ball") {
+        if (userChoice === compChoice) {
+          wicketsP1++;
+          resultText = "You lost a wicket!";
+        } else {
+          runsP1 += userChoice;
+          resultText = "You scored " + userChoice + " run(s)!";
+        }
+      } else if (yourOpt === "ball" && compOpt === "bat") {
+        if (userChoice === compChoice) {
+          wicketsP1++;
+          resultText = "You took a wicket!";
+        } else {
+          runsP1 += compChoice;
+          resultText = "Hacker scored " + compChoice + " run(s)!";
+        }
+      }
+      
+      ballsP1++;
+
+      // Display game progress
+      const gameProgress = document.createElement("p");
+      gameProgress.textContent = `Runs: ${runsP1}, Wickets: ${wicketsP1}, Balls: ${ballsP1}`;
+      gameplayContainer.appendChild(gameProgress);
+
+      if (wicketsP1 === 2 || ballsP1 === 12) {
+        // Display final score and result
+        const finalScore = document.createElement("p");
+        finalScore.textContent = `Final Score: Runs: ${runsP1}, Wickets: ${wicketsP1}`;
+        gameplayContainer.appendChild(finalScore);
+
+        let resultMessage = "";
+        if (yourOpt === "bat" && compOpt === "ball") {
+          if (runsP1 > 0) {
+            resultMessage = "You won the innings!";
+          } else {
+            resultMessage = "Hacker won the innings!";
+          }
+        } else if (yourOpt === "ball" && compOpt === "bat") {
+          if (runsP1 > 0) {
+            resultMessage = "Hacker won the innings!";
+          } else {
+            resultMessage = "You won the innings!";
+          }
+        }
+        const resultText = document.createElement("p");
+        resultText.textContent = resultMessage;
+        resultContainer.appendChild(resultText);
+      } else {
+        // Clear user input for the next ball
+        ballInput.value = "";
+      }
+    });
+  }
+});
+
+  </script>
+</body>
+</html>

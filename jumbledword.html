@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Word Puzzle Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #884A39;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center; 
+      margin-top: 50px;
+      color: white;
+    }
+
+    #gameContainer {
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 0;
+      color: #333;
+    }
+
+    p {
+      margin-bottom: 10px;
+    }
+
+    #jumbledWord {
+      font-size: 24px;
+      text-align: center;
+      color: #333;
+      margin-top: 20px;
+    }
+
+    #guessInput {
+      width: 90%;
+      padding: 15px;
+      font-size: 16px;
+      border: 1px solid gray;
+      border-radius: 3px;
+    }
+
+    #submitBtn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-top: 10px;
+      padding-top: 15px;
+    }
+
+    #resultMessage {
+      text-align: center;
+      color: #333;
+      padding-top: 5px;
+    }
+
+    #score {
+      text-align: center;
+      font-weight: bold;
+      color: #333;
+      margin-top: 10px;
+    }
+    #remainingTime{
+        color:red;
+
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to the Word Puzzle Game!</h1>
+  <div id="gameContainer">
+    <h2 id="roundNumber"></h2>
+    <p id="jumbledWord"></p>
+    <p id="remainingTime"></p>
+    <input type="text" id="guessInput" placeholder="Enter your guess" />
+    <button id="submitBtn">Submit</button>
+    <p id="resultMessage"></p>
+    <p id="score"></p>
+  </div>
+
+  <script>
+    var words = ["cyber", "ddos-attack", "phishing", "social engineering", "malware", "hacker", "cryptography", "man-in-the-middle", "vulnerability", "rootkit"];
+var remainingWords = words.slice();
+var roundNum = 1;
+var score = 0;
+var chosenWord = "";
+var jumbledWord = "";
+var timer;
+
+function chooseWord() {
+  var randomIndex = Math.floor(Math.random() * remainingWords.length);
+  return remainingWords.splice(randomIndex, 1)[0];
+}
+
+function jumbleWord(word) {
+  var jumbled = word.split('').sort(function() { return 0.5 - Math.random() }).join('');
+  return jumbled;
+}
+
+function startTimer() {
+  var remainingTime = 20;
+  var timerDisplay = document.getElementById("remainingTime");
+
+  timer = setInterval(function() {
+    timerDisplay.textContent = "Remaining time: " + remainingTime.toFixed(1) + " seconds";
+    remainingTime -= 0.1;
+
+    if (remainingTime <= 0) {
+      clearInterval(timer);
+      timerDisplay.textContent = "";
+      handleGuess("", true);
+    }
+  }, 100);
+}
+
+function handleGuess(guess, isTimeUp) {
+  clearInterval(timer);
+  var guessInput = document.getElementById("guessInput");
+  var resultMessage = document.getElementById("resultMessage");
+  var scoreDisplay = document.getElementById("score");
+
+  if (isTimeUp) {
+    resultMessage.textContent = "Time's up!";
+  } else if (guess === chosenWord) {
+    resultMessage.textContent = "Correct!";
+    score++;
+  } else {
+    resultMessage.textContent = "Incorrect guess. Try again.";
+  }
+
+  scoreDisplay.textContent = "Your score: " + score;
+
+  if (roundNum < 10 && remainingWords.length > 0) {
+    setTimeout(function() {
+      startRound();
+    }, 1000);
+  } else {
+    setTimeout(function() {
+      endGame();
+    }, 1000);
+  }
+}
+
+function startRound() {
+  var roundNumber = document.getElementById("roundNumber");
+  var jumbledWordDisplay = document.getElementById("jumbledWord");
+  var guessInput = document.getElementById("guessInput");
+  var submitBtn = document.getElementById("submitBtn");
+
+  roundNumber.textContent = "Round " + roundNum + ": Unscramble the letters to form a word.";
+  chosenWord = chooseWord();
+  jumbledWord = jumbleWord(chosenWord);
+
+  jumbledWordDisplay.textContent = "Jumbled word: " + jumbledWord;
+  guessInput.value = "";
+  guessInput.disabled = false;
+  submitBtn.disabled = false;
+
+  startTimer();
+}
+
+function endGame() {
+  var gameContainer = document.getElementById("gameContainer");
+  var resultMessage = document.getElementById("resultMessage");
+
+  gameContainer.innerHTML = "<h2>Thank you for playing!</h2>";
+
+  if (score >= 5) {
+    resultMessage.textContent = "Congratulations! You can go to the next level.";
+    var nextLevelLink = document.createElement("a");
+    nextLevelLink.href = "http://127.0.0.1:5500/memorycard.html";  // Add the link to level 5 here
+    nextLevelLink.textContent = "Go to Level 5";
+    gameContainer.appendChild(nextLevelLink);
+  } else {
+    resultMessage.textContent = "Sorry! Your journey ends here.";
+    window.location.href ="http://127.0.0.1:5500/mcq1.html";
+  }
+}
+
+
+function submitGuess() {
+  var guessInput = document.getElementById("guessInput");
+  var guess = guessInput.value.toLowerCase();
+
+  guessInput.disabled = true;
+  submitBtn.disabled = true;
+
+  handleGuess(guess, false);
+}
+
+window.onload = function() {
+  var submitBtn = document.getElementById("submitBtn");
+  submitBtn.addEventListener("click", submitGuess);
+
+  startRound();
+};
+
+  </script>
+</body>
+</html>

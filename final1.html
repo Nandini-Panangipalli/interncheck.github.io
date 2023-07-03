@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rock Paper Scissors Game</title>
+    <script src="https://cdn.jsdelivr.net/npm/pywebio/pywebio.min.js"></script>
+</head>
+<body>
+    <h1>Hello Player! Welcome to Rock Paper and Scissors!</h1>
+    <p>Beware of the Hacker! The Hacker is too smart and can outplay you!</p>
+
+    <div id="output"></div>
+
+    <script>
+        const choices = ["rock", "paper", "scissors"];
+        const scores = {"player": 0, "hacker": 0};
+
+        function round(player_choice, hacker_choice) {
+            pywebio.output.put_text("Your choice:", player_choice);
+            pywebio.output.put_text("Hacker's choice:", hacker_choice);
+
+            if (player_choice === hacker_choice) {
+                pywebio.output.put_text("Both chose the same --> It's a TIE --> Try again");
+            } else if (
+                (player_choice === "rock" && hacker_choice === "scissors") ||
+                (player_choice === "paper" && hacker_choice === "rock") ||
+                (player_choice === "scissors" && hacker_choice === "paper")
+            ) {
+                pywebio.output.put_text("You Win a point :)... Keep it up");
+                scores["player"] += 1;
+            } else {
+                pywebio.output.put_text("The hacker has got the point :( .. Be careful");
+                scores["hacker"] += 1;
+            }
+        }
+
+        function game() {
+            pywebio.output.put_text("The current scores are:");
+            pywebio.output.put_text("Your Score: " + scores["player"] + " and Hacker's Score: " + scores["hacker"]);
+
+            pywebio.input.select("Enter your choice:", choices).then(function(player_choice) {
+                if (!choices.includes(player_choice)) {
+                    pywebio.output.put_text("This is an invalid choice. Please select a valid choice.");
+                    game();
+                    return;
+                }
+
+                const hacker_choice = choices[Math.floor(Math.random() * choices.length)];
+                round(player_choice, hacker_choice);
+
+                if (scores["player"] < 5 && scores["hacker"] < 5) {
+                    game();
+                } else {
+                    pywebio.output.put_text("The Final Scores are:");
+                    pywebio.output.put_text("Your Score: " + scores["player"] + " and Hacker's Score: " + scores["hacker"]);
+
+                    if (scores["player"] > scores["hacker"]) {
+                        pywebio.output.put_text("Congratulations! You've passed the second round!");
+                        pywebio.output.put_text("Keep going until you become the chief of general.");
+
+                        // Create a link element and append it to the output div
+                        const link = document.createElement("a");
+                        link.href = "http://192.168.1.3:9190/";
+                        link.target = "_blank";
+                        link.textContent = "Go to Next Page";
+                        document.getElementById("output").appendChild(link);
+                    } else {
+                        pywebio.output.put_text("Oh no! You have been attacked by the hacker! Check your data! :(");
+                    }
+                }
+            });
+        }
+
+        pywebio.start_server(game, {port: 8800});
+    </script>
+</body>
+</html>

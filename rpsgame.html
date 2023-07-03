@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rock Paper Scissors Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #884A39;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+            color: white;
+        }
+
+        #gameContainer {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 0;
+            color: #333;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        #jumbledWord {
+            font-size: 24px;
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        #guessInput {
+            width: 90%;
+            padding: 15px;
+            font-size: 16px;
+            border: 1px solid gray;
+            border-radius: 3px;
+        }
+
+        #submitBtn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+            padding-top: 15px;
+        }
+
+        #resultMessage {
+            text-align: center;
+            color: #333;
+            padding-top: 5px;
+        }
+
+        #score {
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rock Paper Scissors Game</h1>
+    <div id="gameContainer">
+        <h2>Welcome to Rock Paper and Scissors!</h2>
+        <p>Beware of the Hacker!</p>
+        <p>The Hacker is too smart and can outplay you!</p>
+        <div id="score"></div>
+        <div class="choice">
+            <label for="player-choice">Enter your choice:</label>
+            <select id="player-choice">
+                <option value="rock">Rock</option>
+                <option value="paper">Paper</option>
+                <option value="scissors">Scissors</option>
+            </select>
+        </div>
+        <div class="button">
+            <button onclick="playRound()">Play Round</button>
+        </div>
+        <div class="result">
+            <p id="result-text"></p>
+            <p id="final-result"></p> 
+        </div>
+    </div>
+
+    <script>
+        var choices = ["rock", "paper", "scissors"];
+        var scores = { player: 0, hacker: 0 };
+        var gamePlayed = false;
+
+        function playRound() {
+            if (gamePlayed) {
+                return;
+            }
+
+            var playerChoice = document.getElementById("player-choice").value;
+            var hackerChoice = choices[Math.floor(Math.random() * choices.length)];
+
+            displayChoices(playerChoice, hackerChoice);
+
+            if (playerChoice === hackerChoice) {
+                displayResult("Both chose the same --> It's a TIE --> Try again");
+            } else if (
+                (playerChoice === "rock" && hackerChoice === "scissors") ||
+                (playerChoice === "paper" && hackerChoice === "rock") ||
+                (playerChoice === "scissors" && hackerChoice === "paper")
+            ) {
+                scores.player++;
+                displayResult("You Win a point :)... Keep it up");
+            } else {
+                scores.hacker++;
+                displayResult("The hacker has got the point :( .. Be careful");
+            }
+
+            updateScores();
+
+            if (scores.player >= 5 || scores.hacker >= 5) {
+                gamePlayed = true;
+                displayFinalResult();
+            }
+        }
+
+        function displayChoices(playerChoice, hackerChoice) {
+            var content = document.getElementById("gameContainer");
+            var resultText = document.getElementById("result-text");
+
+            resultText.innerText = "";
+            content.insertAdjacentHTML("beforeend", "<div>Your choice: " + playerChoice + "</div>");
+            content.insertAdjacentHTML("beforeend", "<div>Hacker's choice: " + hackerChoice + "</div>");
+        }
+
+        function displayResult(result) {
+            var resultText = document.getElementById("result-text");
+            resultText.innerText = result;
+        }
+
+        function updateScores() {
+            var playerScore = document.getElementById("score");
+            playerScore.innerText = "Your Score: " + scores.player + " | Hacker's Score: " + scores.hacker;
+        }
+
+        function displayFinalResult() {
+            var content = document.getElementById("gameContainer");
+            var finalResult = document.getElementById("final-result");
+
+            content.removeChild(content.lastElementChild); // Remove the "Play Round" button
+            finalResult.innerText = "The Final Scores are:\nYour Score: " + scores.player + "\nHacker's Score: " + scores.hacker;
+
+            if (scores.player > scores.hacker) {
+                finalResult.insertAdjacentText("afterend", "Congratulations! You've passed the second round!\nKeep going until you become the chief of general.");
+                window.location.href = "http://127.0.0.1:5500/hm.html";
+            } else {
+                finalResult.insertAdjacentText("afterend", "Oh no! You have been eliminated from the game!");
+                window.location.href ="http://127.0.0.1:5500/mcq1.html";
+            }
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+     <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+     <link href="rps.css" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.2/font/bootstrap-icons.min.css" integrity="sha512-YFENbnqHbCRmJt5d+9lHimyEMt8LKSNTMLSaHjvsclnZGICeY/0KYEeiHwD1Ux4Tcao0h60tdcMv+0GljvWyHg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+<body>
+    <header>
+        <div class="bye">
+        <img src="https://www.drreddys.com/images/DrR_Logo_Primary_RGB_v3.jpg"  height="50" alt="brand logo">
+        </div>
+     <div class="hi">
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="http://127.0.0.1:5500/home.html" target="_blank">Home</a>
+    <a href="http://127.0.0.1:5500/about.html" target="_blank">About</a>
+    <a href="http://127.0.0.1:5500/game.html" target="_blank">Games</a>
+    <a href="http://127.0.0.1:5500/contact.html" target="_blank">Contact</a>
+  </div>
+        
+  
+  <div id="main">
+    <span style="font-size:30px;cursor:pointer" onclick="openNav()"> &#9776;</span>
+  </div>
+     </div>
+    </header>
+    
+    <h1>Level:1--Rock Paper Scissors</h1>
+    <h2>Instructions</h2>
+
+    <div class="hi">
+      <div class="card-1">
+          <div class="card-body">
+            <h4 class="card-title">How To Play</h4>
+            <p class="card-text"></p>
+            <p>Despite its underlying complexity, the game’s rules are straightforward. Players deliver hand signals representing rock, paper, or scissors, with the outcome determined by these three rules:</p>
+                    <p class="card-text"><ol>
+                        <li>Rock wins against scissors.</li>
+                        <li>Scissors win against paper.</li>
+                        <li>Paper wins against rock.</li>
+                    </ol></p>
+                    <p>Remember to use the “Rock Paper Scissors Shoot” or “1, 2, 3, Shoot” method for a fair and synchronized start.</p>
+          </div>
+        </div>
+      </div> 
+  
+      <br>
+      <br>
+      <br>
+
+      <div class="card-container">          
+      <div class="card">
+        <img src="https://wrpsa.com/wp-content/uploads/2021/08/rock-200x187.png" alt="Avatar" style="width:100%">
+        <br>
+        <div class="card-container">
+          <h4><b>ROCK</b></h4>
+          <p>The rock is when you place your hand into the form of a simple fist. The rock will beat scissors every time but will be beaten by paper.</p>
+        </div>
+      </div>
+    
+      
+
+    
+  
+      <div class="card">
+        <img src="https://wrpsa.com/wp-content/uploads/2021/08/paper-200x187.png" alt="Avatar" style="width:100%">
+        <br>
+        <div class="container">
+          <h4><b>PAPER</b></h4>
+          <p>The paper is when you place your hand in an outstretched position.Paper will beat rock but will be beaten by scissors in no time.</p>
+        </div>
+      </div>
+     
+ 
+      <div class="card">
+        <img src="https://wrpsa.com/wp-content/uploads/2021/08/scissors-200x187.png" alt="Avatar" style="width:100%">
+        <br>
+        <div class="container">
+          <h4><b>SCISSORS</b></h4>
+          <p>This is when you hold your fist with your index and middle finger pointing outwards in a V shape. Scissors will beat paper but rock beats scissors in no time.</p>
+        </div>
+      </div>
+      </div>
+   
+
+
+       <br>
+       <br>
+       <br>
+
+    <footer class="bg-dark">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="container m-5">
+                        <img src="https://www.drreddys.com/images/DrR_Logo_Primary_RGB_v3.jpg" height="30px" class="bg-white">
+                        <div>
+                          <br>
+                          <p class="text-white"> Take This Journey Towards A Healthier Network<br>
+                              Because Good Health Can't Wait</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="container m-5">
+                        <p class="text-white fs-5">Quick Links</p>
+                        <ul class="remove-bullets remove-text-decoration">
+                            <li><a href="http://127.0.0.1:5500/home.html" target="_blank" class="remove-text-decoration text-white">Home</a></li>
+                            <li><a href="http://127.0.0.1:5500/about.html" class="remove-text-decoration text-white">About</a></li>
+                            <li><a href="http://127.0.0.1:5500/game.html" target="_blank" class="remove-text-decoration text-white">Games</a></li>
+                            <li><a href="http://127.0.0.1:5500/contact.html" class="remove-text-decoration text-white">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="text-white text-center">
+                    <p>All rights reserved and copy 2022, <a href="https://www.drreddys.com/">Dr.Reddy's.com</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+  
+  <script>
+  function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+  }
+  
+  function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+  }
+  </script>
+       
+     <script src="https://code.jquery.com/jquery-3.6.2.js" integrity="sha256-pkn2CUZmheSeyssYw3vMp1+xyub4m+e+QK4sQskvuo4=" crossorigin="anonymous"></script>   
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js" integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="vendor/bootstrap/js/bootstrap.js"></script>
+</body>
+</html>

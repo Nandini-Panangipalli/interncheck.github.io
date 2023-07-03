@@ -1,0 +1,108 @@
+body {
+    font-family: "Lato", sans-serif;
+    
+  }
+  
+  .sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    text-align: center;
+
+    
+  }
+  
+  .sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+  
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+  
+  .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    left: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    padding-left: 100px;
+  }
+  
+  #main {
+    transition: margin-right .5s;
+    text-align: right;
+    text-align: top;
+    padding-right: 30px;
+  }
+
+  
+
+  .bye{
+    padding-top: 30px;
+  }
+ 
+  
+  .remove-text-decoration{
+    text-decoration: none;
+     }
+
+
+     body{
+      background-image: url(https://www.shutterstock.com/image-vector/low-poly-abstract-background-colorful-260nw-765819142.jpg);
+      background-repeat: no-repeat;
+      background-size: 100%;
+      background-attachment: fixed;
+    }
+  
+  
+    h4{
+      text-align: center;
+    }
+  
+    .card {
+     
+      display: inline-block;
+      width: 550px;
+      height: 350px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 20px;
+      margin: 10px;
+      text-align: center;
+  
+  }
+  
+  
+    .card-body{
+      background-color: rgb(255, 212, 178);
+      font-style: italic;
+    }
+    
+    h1,h2{
+      text-align: center;
+      padding-bottom: 35px;
+      font-family:sans-serif;
+      font-style: italic;
+    }
+    h1{
+      padding-bottom: 15px;
+    }
+  
+    .hi{
+      padding-left: 480px;
+      
+    }
+  

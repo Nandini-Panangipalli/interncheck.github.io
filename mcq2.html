@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz--2</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap");
+
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #867070;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding-top: 30px;
+}
+
+.quiz-container {
+    color: black;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 2px rgba(100, 100, 100, 0.1);
+    overflow: hidden;
+    width: 600px;
+    max-width: 100%;
+    background: #D5B4B4;
+}
+
+.quiz-header {
+    padding: 4rem;
+}
+
+button {
+    background-color: #aa84bb;
+    border: none;
+    color: black;
+    cursor: pointer;
+    display: block;
+    font-family: inherit;
+    font-size: 1.1rem;
+    width: 100%;
+    padding: 1.3rem;
+}
+
+button:hover {
+    background-color: #732d91;
+}
+
+button:focus {
+    background-color: #5e3370;
+    outline: none;
+}
+
+h1{
+    font-size: 55px;
+    text-align: center;
+    top: -30px;
+}
+
+h2 {
+  
+    text-align: center;
+    margin: 0;
+    font-size: xx-large;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    font-size: 1.2rem;
+    margin: 1rem 0;
+}
+
+ul li label {
+    cursor: pointer;
+}
+.timer-check{
+    text-align: right;
+    font-size: 25px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color:red;
+    padding-top:30px;
+    padding-right: 30px;
+
+}
+
+    </style>
+</head>
+<body>
+    <div class="quiz-container" id="quiz">
+        <div id="timer" class="timer-check"></div>
+        <div class="quiz-header">
+            <h1>Quiz--2</h1>
+            <h2 id="question">Question text</h2>
+            <ul>
+                <li>
+                    <input type="radio" id="a" name="answer" class="answer" />
+                    <label id="a_text" for="a">Question</label>
+                </li>
+                <li>
+                    <input type="radio" id="b" name="answer" class="answer" />
+                    <label id="b_text" for="b">Question</label>
+                </li>
+                <li>
+                    <input type="radio" id="c" name="answer" class="answer" />
+                    <label id="c_text" for="c">Question</label>
+                </li>
+                <li>
+                    <input type="radio" id="d" name="answer" class="answer" />
+                    <label id="d_text" for="d">Question</label>
+                </li>
+            </ul>
+        </div>
+        <button id="submit">Submit</button>
+    </div>
+
+    <script>
+        const quizData = [
+    {
+    question: "A friend sends an electronic Hallmark greeting card (e-card) to your work email. You need to click on the attachment to see the card.What should you do?",
+    a: "Delete the message",
+    b: "Open the message",
+    c: "Ignore the message",
+    d: "Complain about it",
+    correct: "a"},
+
+    {
+    question: "What is the best practice to protect your computer from malware?",
+    a: "Disabling the firewall",
+    b: "Clicking on links in suspicious emails",
+    c: "Regularly updating antivirus software",
+    d: " Sharing information with trusted friends",
+    correct: "c"},
+
+
+    {
+    question: "What does the term 'Phishing' refers to?",
+    a: "A method of encrypting files for security purposes",
+    b: "A type of malware that replicates itself",
+    c: "A social engineering attack that tricks individuals into revealing sensitive information",
+    d: "A form of hacking that involves manipulating network traffic",
+    correct: "c"},
+
+    {
+    question: "Which of the following is the hacking approach where cyber-criminals design fake websites or pages for tricking or gaining additional traffic?",
+    a: "Pharming",
+    b: "Website-Duplication",
+    c: "Mimicking",
+    d: "Spamming",
+    correct: "a"},
+
+    {
+    question: "We saw a case a while back where someone used their yahoo account at a computer lab on campus. She made sure her yahoo account was no longer open in the browser window before leaving the lab. Someone came in behind her and used the same browser to re-access her account. They started sending emails from it and caused all sorts of mayhem. What could have happened?",
+    a: "She didn't logout of her account which gave easy access to the next user.",
+    b: "She did logout but didn't clear her web cache.",
+    c: "Both A and B",
+    d: "None",
+    correct: "c"}];
+
+    const quiz = document.getElementById("quiz");
+const answerEls = document.querySelectorAll(".answer");
+const questionEl = document.getElementById("question");
+const a_text = document.getElementById("a_text");
+const b_text = document.getElementById("b_text");
+const c_text = document.getElementById("c_text");
+const d_text = document.getElementById("d_text");
+const submitBtn = document.getElementById("submit");
+const timerEl = document.getElementById("timer");
+
+let currentQuiz = 0;
+let score = 0;
+let timeLeft = 150;
+let timerId;
+
+loadQuiz();
+startTimer();
+
+function loadQuiz() {
+  clearInterval(timerId);
+  deselectAnswers();
+  const currentQuizData = quizData[currentQuiz];
+  questionEl.innerText = currentQuizData.question;
+  a_text.innerText = currentQuizData.a;
+  b_text.innerText = currentQuizData.b;
+  c_text.innerText = currentQuizData.c;
+  d_text.innerText = currentQuizData.d;
+  startTimer();
+}
+
+function startTimer() {
+  timerId = setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+  if (timeLeft > 0) {
+    timeLeft--;
+    timerEl.innerText = `Time Left: ${timeLeft} sec`;
+  } else {
+    clearInterval(timerId);
+    displayScoreAndSolution();
+  }
+}
+
+function displayScoreAndSolution() {
+  quiz.innerHTML = `<h2>Time's Up!</h2>
+    <h3>Your score: ${score}/${quizData.length} questions</h3>
+    <button onclick="window.location.href='mcq2a.html'">Solutions and Explanation</button>`;
+}
+
+function getSelected() {
+  let answer = undefined;
+  answerEls.forEach(answerEl => {
+    if (answerEl.checked) {
+      answer = answerEl.id;
+    }
+  });
+  return answer;
+}
+
+function deselectAnswers() {
+  answerEls.forEach(answerEl => {
+    answerEl.checked = false;
+  });
+}
+
+submitBtn.addEventListener("click", () => {
+  const answer = getSelected();
+  if (answer) {
+    if (answer === quizData[currentQuiz].correct) {
+      score++;
+    }
+    currentQuiz++;
+    if (currentQuiz < quizData.length) {
+      loadQuiz();
+    } else {
+      clearInterval(timerId);
+      // Display the final score
+      quiz.innerHTML = `<h2>You answered correctly at ${score}/${quizData.length} questions.</h2>
+      <button onclick="window.location.href='mcq2a.html'">Solutions and Explanation</button>`;
+     
+    }
+  }
+});
+
+
+    </script>
+    
+</body>
+</html>

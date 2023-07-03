@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registered Users</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .container h2 {
+      text-align: center;
+    }
+    .container input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Registered Users</h2>
+    <form id="exportForm">
+      <input type="submit" value="Export to Excel">
+    </form>
+  </div>
+
+  <script>
+    // Export registered users to a CSV file
+    const exportForm = document.getElementById('exportForm');
+
+    exportForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Retrieve all registered users from localStorage
+      const registeredUsers = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('user_')) {
+          const user = JSON.parse(localStorage.getItem(key));
+          registeredUsers.push(user);
+        }
+      }
+
+      // Generate the CSV content
+      let csvContent = 'data:text/csv;charset=utf-8,';
+      csvContent += 'Username,Score\n';
+      registeredUsers.forEach(user => {
+        csvContent += `${user.username},${user.score}\n`;
+      });
+
+      // Create a temporary link and initiate the download
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', 'registered_users.csv');
+      document.body.appendChild(link);
+      link.click();
+    });
+  </script>
+</body>
+</html>

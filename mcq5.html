@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz--5</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap");
+
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #867070;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding-top: 30px;
+}
+
+.quiz-container {
+    color: black;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 2px rgba(100, 100, 100, 0.1);
+    overflow: hidden;
+    width: 600px;
+    max-width: 100%;
+    background: #D5B4B4;
+}
+
+.quiz-header {
+    padding: 4rem;
+}
+
+button {
+    background-color: #aa84bb;
+    border: none;
+    color: black;
+    cursor: pointer;
+    display: block;
+    font-family: inherit;
+    font-size: 1.1rem;
+    width: 100%;
+    padding: 1.3rem;
+}
+
+button:hover {
+    background-color: #732d91;
+}
+
+button:focus {
+    background-color: #5e3370;
+    outline: none;
+}
+
+h1{
+    font-size: 55px;
+    text-align: center;
+    top: -30px;
+}
+
+h2 {
+  
+    text-align: center;
+    margin: 0;
+    font-size: xx-large;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    font-size: 1.2rem;
+    margin: 1rem 0;
+}
+
+ul li label {
+    cursor: pointer;
+}
+.timer-check{
+    text-align: right;
+    font-size: 25px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color:red;
+    padding-top:30px;
+    padding-right: 30px;
+
+}
+
+    </style>
+</head>
+<body>
+    <div class="quiz-container" id="quiz">
+        <div id="timer" class="timer-check"></div>
+        <div class="quiz-header">
+            <h1>Quiz--5</h1>
+            <h2 id="question">Question text</h2>
+            <ul>
+                <li>
+                    <input type="radio" id="a" name="answer" class="answer" />
+                    <label id="a_text" for="a">Question</label>
+                </li>
+                <li>
+                    <input type="radio" id="b" name="answer" class="answer" />
+                    <label id="b_text" for="b">Question</label>
+                </li>
+                <li>
+                    <input type="radio" id="c" name="answer" class="answer" />
+                    <label id="c_text" for="c">Question</label>
+                </li>
+                <li>
+                    <input type="radio" id="d" name="answer" class="answer" />
+                    <label id="d_text" for="d">Question</label>
+                </li>
+            </ul>
+        </div>
+        <button id="submit">Submit</button>
+    </div>
+
+    <script>
+        const quizData = [
+    {
+    question: "Which of the following can diminish the chance of data leakage?",
+    a: "Steganography",
+    b: "Chorography",
+    c: "Cryptography",
+    d: "Authentication",
+    correct: "a"},
+
+    {
+    question: "What is the purpose of a 'honeypot' in cybersecurity?",
+    a: "To gather intelligence on cyber attackers and their techniques.",
+    b: "To protect against distributed denial-of-service (DDoS) attacks.",
+    c: "To scan and remove malware from a network or system.",
+    d: "To encrypt sensitive data during transmission.",
+    correct: "a"},
+
+
+    {
+    question: "Which of the following best describes a 'watering hole' attack?",
+    a: "A technique where an attacker floods a network with traffic to disrupt its normal operation.",
+    b: "A social engineering attack that targets a specific individual or group using tailored and personalized methods.",
+    c: "A method of delivering malware by compromising a legitimate website that the target frequently visits.",
+    d: "A cryptographic algorithm used for secure communication and data integrity.",
+    correct: "c"},
+
+    {
+    question: "What is the purpose of a 'sandbox' in the context of cybersecurity?",
+    a: "To create a controlled environment for testing and analyzing potentially malicious software.",
+    b: "To secure sensitive data by storing it in an encrypted format.",
+    c: "To prevent unauthorized access to a network or system.",
+    d: "To monitor and track user activity for potential security threats.",
+    correct: "a"},
+
+    {
+    question: "What is the purpose of encryption in data security?",
+    a: "To prevent unauthorized access to data by converting it into a secret code.",
+    b: "To identify and remove malicious software from data.",
+    c: "To create multiple copies of data for redundancy and fault tolerance.",
+    d: "To authenticate and verify the integrity of data during transmission.",
+    correct: "a"}];
+
+    
+
+    const quiz = document.getElementById("quiz");
+const answerEls = document.querySelectorAll(".answer");
+const questionEl = document.getElementById("question");
+const a_text = document.getElementById("a_text");
+const b_text = document.getElementById("b_text");
+const c_text = document.getElementById("c_text");
+const d_text = document.getElementById("d_text");
+const submitBtn = document.getElementById("submit");
+const timerEl = document.getElementById("timer");
+
+let currentQuiz = 0;
+let score = 0;
+let timeLeft = 150;
+let timerId;
+
+loadQuiz();
+startTimer();
+
+function loadQuiz() {
+  clearInterval(timerId);
+  deselectAnswers();
+  const currentQuizData = quizData[currentQuiz];
+  questionEl.innerText = currentQuizData.question;
+  a_text.innerText = currentQuizData.a;
+  b_text.innerText = currentQuizData.b;
+  c_text.innerText = currentQuizData.c;
+  d_text.innerText = currentQuizData.d;
+  startTimer();
+}
+
+function startTimer() {
+  timerId = setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+  if (timeLeft > 0) {
+    timeLeft--;
+    timerEl.innerText = `Time Left: ${timeLeft} sec`;
+  } else {
+    clearInterval(timerId);
+    displayScoreAndSolution();
+  }
+}
+
+function displayScoreAndSolution() {
+  quiz.innerHTML = `<h2>Time's Up!</h2>
+    <h3>Your score: ${score}/${quizData.length} questions</h3>
+    <button onclick="window.location.href='mcq5a.html'">Solutions and Explanation</button>`;
+}
+
+function getSelected() {
+  let answer = undefined;
+  answerEls.forEach(answerEl => {
+    if (answerEl.checked) {
+      answer = answerEl.id;
+    }
+  });
+  return answer;
+}
+
+function deselectAnswers() {
+  answerEls.forEach(answerEl => {
+    answerEl.checked = false;
+  });
+}
+
+submitBtn.addEventListener("click", () => {
+  const answer = getSelected();
+  if (answer) {
+    if (answer === quizData[currentQuiz].correct) {
+      score++;
+    }
+    currentQuiz++;
+    if (currentQuiz < quizData.length) {
+      loadQuiz();
+    } else {
+      clearInterval(timerId);
+      // Display the final score
+      quiz.innerHTML = `<h2>You answered correctly at ${score}/${quizData.length} questions.</h2>
+      <button onclick="window.location.href='mcq5a.html'">Solutions and Explanation</button>`;
+     
+    }
+  }
+});
+</script>
+    
+</body>
+</html>

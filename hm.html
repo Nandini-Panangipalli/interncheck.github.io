@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Guess Game</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #884A39;
+}
+
+h1 {
+  margin-top: 20px;
+}
+ 
+#game-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#round-info {
+  margin-top: 30px;
+  font-size: large;
+
+}
+
+#game-content {
+  margin-top: 30px;
+  font-size: large;
+}
+
+#guess-input {
+  margin-top: 10px;
+  padding: 5px;
+  font-size: large;
+
+}
+
+#guess-button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  font-size: large;
+
+}
+
+#result-info {
+  margin-top: 20px;
+  font-weight: bold;
+}
+#timer{
+  color:red;
+}
+
+.container{
+  padding-top: 80px;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+  <div id="game-container">
+    <h1>Guess Game</h1>
+    <div id="round-info">
+      <p id="round-number"></p>
+      <p id="word-info"></p>
+      <p id="clue-info"></p>
+      <p id="timer"></p>
+    </div>
+    <div id="game-content">
+      <p id="word-display"></p>
+      <input type="text" id="guess-input" placeholder="Guess a character">
+      <button id="guess-button">Submit</button>
+      <p id="turns-info"></p>
+    </div>
+    <p id="result-info"></p>
+  </div>
+</div>
+  <script>
+   document.addEventListener("DOMContentLoaded", function() {
+      var roundNumber = 1;
+      var score = 0;
+      var totalTurns = 5;
+      var roundTime = 45;
+      var rounds = 5;
+      var wordsAndClues = {
+        "malware": "A malicious software that damages or gets unauthorized access to your network",
+        "worm": "Malware that can reproduce itself for the purposes of spreading itself to other computers in the network",
+        "firewall": "Any technology, be it software or hardware, used to keep intruders out",
+        "encryption": "Cypher code used to protect your information from hackers",
+        "hacking": "Gaining unauthorized access to your computer and later take your information"
+      };
+
+      var gameContainer = document.getElementById("game-container");
+      var roundNumberElem = document.getElementById("round-number");
+      var wordInfoElem = document.getElementById("word-info");
+      var clueInfoElem = document.getElementById("clue-info");
+      var timerElem = document.getElementById("timer");
+      var wordDisplayElem = document.getElementById("word-display");
+      var guessInput = document.getElementById("guess-input");
+      var guessButton = document.getElementById("guess-button");
+      var turnsInfoElem = document.getElementById("turns-info");
+      var resultInfoElem = document.getElementById("result-info");
+
+      guessButton.addEventListener("click", handleGuess);
+
+      var timerId; // Variable to store the timer interval
+
+      function startGame() {
+        gameContainer.style.display = "block";
+        roundNumberElem.innerText = "Round " + roundNumber;
+        wordInfoElem.innerText = "The word has " + getCurrentWord().length + " letters.";
+        clueInfoElem.innerText = "Clue: " + getCurrentClue();
+        wordDisplayElem.innerText = generateDashes(getCurrentWord().length);
+        guessInput.value = "";
+        guessInput.disabled = false; // Enable the input field
+        guessInput.focus();
+        turnsInfoElem.innerText = "You have " + totalTurns + " more guesses";
+        timerElem.innerText = "Time remaining: " + roundTime + " seconds";
+        resultInfoElem.innerText = "";
+        startTimer();
+      }
+
+      function startTimer() {
+        var remainingTime = roundTime;
+        timerElem.innerText = "Time remaining: " + remainingTime + " seconds";
+        guessButton.disabled = false; 
+        totalTurns = 5; // Reset the totalTurns to its initial value
+
+
+        timerId = setInterval(function() {
+
+          remainingTime--;
+          timerElem.innerText = "Time remaining: " + remainingTime + " seconds";
+
+          if (remainingTime <= 10) {
+            timerElem.style.color = "red";
+          }
+
+          if (remainingTime <= 0) {
+            timerElem.style.color = "black";
+            timerElem.innerText = "Time's up!";
+            clearInterval(timerId);
+            guessInput.disabled = true; // Disable the input field
+            handleRoundEnd(false);
+          }
+        }, 1000);
+      }
+
+      function handleGuess(event) {
+        event.preventDefault(); // Prevent the form from submitting and refreshing the page
+
+        var guess = guessInput.value.toLowerCase();
+
+        if (guess.length !== 1) {
+          alert("Please enter a single character as your guess.");
+          return;
+        }
+
+        if (!guess.match(/^[a-zA-Z]+$/)) {
+          alert("Please enter a letter as your guess.");
+          return;
+        }
+
+        var currentWord = getCurrentWord();
+        var updatedWordDisplay = "";
+
+        for (var i = 0; i < currentWord.length; i++) {
+          if (currentWord[i] === guess) {
+            updatedWordDisplay += guess;
+          } else {
+            updatedWordDisplay += wordDisplayElem.innerText[i];
+          }
+        }
+
+        wordDisplayElem.innerText = updatedWordDisplay;
+
+        if (!updatedWordDisplay.includes("_")) {
+          handleRoundEnd(true);
+        } else if (!currentWord.includes(guess)) {
+          totalTurns--;
+          turnsInfoElem.innerText = "You have " + totalTurns + " more guesses";
+          if (totalTurns <= 0) {
+            guessButton.disabled = true; // Disable the submit button
+            guessInput.disabled = true; // Disable the input field
+            handleRoundEnd(false);
+          }
+        }
+
+        guessInput.value = "";
+        guessInput.focus();
+      }
+
+      function handleRoundEnd(won) {
+        if (won) {
+          score++;
+          resultInfoElem.innerText = "Congratulations! You won the round!";
+        } else {
+          resultInfoElem.innerText = "Wrong! You lost the round.";
+        }
+
+        clearInterval(timerId); // Clear the interval for the current round
+
+        if (roundNumber < rounds) {
+          roundNumber++;
+          setTimeout(startGame, 2000);
+        } else {
+          setTimeout(showGameResult, 2000);
+        }
+      }
+
+      function showGameResult() {
+        if (score > 2) {
+          resultInfoElem.innerText = "Congratulations! You've passed this game. See you in the next level.";
+          window.location.href = "http://127.0.0.1:5500/3.html";
+        } else {
+          resultInfoElem.innerText = "UH OOH! You've lost to the hacker. Sorry, you are out of the game.";
+          window.location.href ="http://127.0.0.1:5500/mcq1.html";
+        }
+      }
+
+      function generateDashes(length) {
+        return "_".repeat(length);
+      }
+
+      function getCurrentWord() {
+        var words = Object.keys(wordsAndClues);
+        return words[roundNumber - 1];
+      }
+
+      function getCurrentClue() {
+        var clues = Object.values(wordsAndClues);
+        return clues[roundNumber - 1];
+      }
+
+      startGame();
+    });
+  </script>
+</body>
+</html>
